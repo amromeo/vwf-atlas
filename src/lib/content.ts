@@ -12,6 +12,12 @@ const imageTypes: Record<string, string> = {
   ".webp": "image/webp",
 };
 const https = z.url({ protocol: /^https$/ });
+const cropRect = z.object({
+  x: z.number().int().nonnegative(),
+  y: z.number().int().nonnegative(),
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
+});
 const schema = z
   .object({
     id: text.regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -21,6 +27,7 @@ const schema = z
     conditions: z.array(text).min(1),
     patient: z.object({
       label: text,
+      family: text,
       age: text,
       sex: text,
       bloodGroup: text,
@@ -31,7 +38,7 @@ const schema = z
     }),
     source: z.object({
       citation: text,
-    shortCitation: text,
+      shortCitation: text,
       doi: text.regex(/^10\.\d{4,9}\/\S+$/),
       pmid: text.regex(/^\d+$/),
       url: https,
@@ -39,7 +46,45 @@ const schema = z
       table: text,
       accessed: z.iso.date(),
     }),
-    image: z.object({ file: text, width: z.number().int().positive(), height: z.number().int().positive(), focus: text, alt: text, caption: text }),
+    image: z
+      .object({
+        file: text,
+        width: z.number().int().positive(),
+        height: z.number().int().positive(),
+        focus: text,
+        alt: text,
+        caption: text,
+        crop: z.object({
+          patient: cropRect,
+          control: cropRect,
+          patientLane: z.number().int().positive(),
+          controlLane: z.number().int().positive(),
+        }),
+      })
+      .superRefine((image, ctx) => {
+        for (const rect of [image.crop.patient, image.crop.control]) {
+          if (
+            rect.x + rect.width > image.width ||
+            rect.y + rect.height > image.height
+          ) {
+            ctx.addIssue({
+              code: "custom",
+              message: "Crop rectangle exceeds the source image bounds.",
+            });
+          }
+        }
+        if (
+          image.crop.patient.y !== image.crop.control.y ||
+          image.crop.patient.height !== image.crop.control.height
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              "Patient and control must retain the same vertical scale and range.",
+          });
+        }
+      }),
+    sourceIssues: z.array(text),
     rights: z.object({
       label: text,
       url: https,

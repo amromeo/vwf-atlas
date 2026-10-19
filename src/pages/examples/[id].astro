@@ -2,14 +2,20 @@
 import AtlasLayout from '../../layouts/AtlasLayout.astro';
 import { loadAtlas, type AtlasExample } from '../../lib/content';
 export async function getStaticPaths() {
-  return (await loadAtlas({ review: __ATLAS_REVIEW__ })).map((example) => ({ params: { id: example.id }, props: { example } }));
+  const examples = await loadAtlas({ review: __ATLAS_REVIEW__ });
+  return examples.map((example) => ({ params: { id: example.id }, props: { example, siblings: examples.filter((other) => other.imageDigest === example.imageDigest).sort((a,b) => a.image.crop.patient.x - b.image.crop.patient.x) } }));
 }
-interface Props { example: AtlasExample }
-const { example: e } = Astro.props;
+interface Props { example: AtlasExample; siblings: AtlasExample[] }
+const { example: e, siblings } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const imageUrl = `${base}/media/${e.imageName}`;
+const scale = 1.1;
+const lanes = [
+  { rect: e.image.crop.control, title: 'Normal reference', label: `NP · source lane ${e.image.crop.controlLane}`, alt: `NP reference lane ${e.image.crop.controlLane}, cropped from original Figure 1` },
+  { rect: e.image.crop.patient, title: e.patient.label, label: `Source lane ${e.image.crop.patientLane}`, alt: `${e.patient.label} lane, cropped from original Figure 1` },
+];
 ---
-<AtlasLayout title={e.title}>
+<AtlasLayout title={`${e.title} — ${e.patient.label}`}>
   <div class="page-wrap">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={`${base}/`}>Atlas</a><span aria-hidden="true">/</span><span>Published example</span></nav>
     {!e.approval && <aside class="draft-banner" aria-label="Scientific review status"><span class="status-dot" aria-hidden="true"></span><strong>Draft for scientific review</strong><span>Interpretation and presentation await the scientific editor’s approval.</span></aside>}
@@ -18,22 +24,25 @@ const imageUrl = `${base}/media/${e.imageName}`;
       <h1>{e.title}</h1>
       <p class="standfirst">{e.summary}</p>
       <div class="tags"><span>{e.conditions[0]}</span><span>{e.patient.label}</span><span>{e.source.shortCitation}</span></div>
+      <nav class="patient-links" aria-label="Patients in source Figure 1"><span>Patients in this figure</span>{siblings.map((entry) => <a href={`${base}/examples/${entry.id}/`} aria-current={entry.id === e.id ? 'page' : undefined}>{entry.patient.label}</a>)}</nav>
     </div>
+    {e.sourceIssues.length > 0 && <aside class="source-issues" aria-label="Source data requiring review"><strong>Source data requiring review</strong>{e.sourceIssues.map((issue) => <p>{issue}</p>)}</aside>}
     <div class="example-grid">
         <section class="figure-section" aria-labelledby="figure-title">
           <div class="section-heading"><div><p class="eyebrow">01 / Source image</p><h2 id="figure-title">The multimer gel</h2></div><a class="quiet-link" href={imageUrl} target="_blank" rel="noopener">Open original image <span aria-hidden="true">↗</span></a></div>
           <figure class="gel-figure">
-            <div class="gel-canvas"><img src={imageUrl} alt={e.image.alt} width={e.image.width} height={e.image.height} fetchpriority="high" /></div>
+            <div class="patient-crops">{lanes.map((lane) => <div class="lane-panel"><h3>{lane.title}</h3><p>{lane.label}</p><div class="lane-viewport" style={`width:${lane.rect.width*scale}px;height:${lane.rect.height*scale}px;`}><img src={imageUrl} alt={lane.alt} width={e.image.width} height={e.image.height} fetchpriority="high" style={`width:${e.image.width*scale}px;height:${e.image.height*scale}px;left:${-lane.rect.x*scale}px;top:${-lane.rect.y*scale}px;`} /></div></div>)}</div>
             <figcaption>{e.image.caption}</figcaption>
           </figure>
           <p class="figure-credit">{e.rights.attribution} <a href={e.rights.url}>{e.rights.label}</a>. {e.rights.modifications}</p>
           <div class="lane-note"><span class="note-mark" aria-hidden="true">↳</span><p>{e.image.focus}</p></div>
+          <details class="complete-figure"><summary>Complete source Figure 1</summary><div class="gel-canvas"><img src={imageUrl} alt={e.image.alt} width={e.image.width} height={e.image.height} /></div><p class="small-note">The complete unmodified figure retains every source lane, its original lane labels, and the embedded laboratory table.</p></details>
         </section>
       <aside class="case-sidebar" aria-labelledby="case-title">
         <section class="case-card">
           <p class="eyebrow">The published case</p><h2 id="case-title">{e.patient.label}</h2>
           <div class="patient-demographics"><span>{e.patient.age}</span><span>{e.patient.sex}</span><span>Group {e.patient.bloodGroup}</span></div>
-          <dl class="case-facts"><div><dt>Diagnosis as reported</dt><dd>{e.patient.diagnosis}</dd></div><div><dt>VWF variant</dt><dd><span class="variant">{e.patient.variant}</span></dd></div><div><dt>Bleeding assessment score</dt><dd>{e.patient.bleedingScore}</dd></div></dl>
+          <dl class="case-facts"><div><dt>Source family identifier</dt><dd>{e.patient.family}</dd></div><div><dt>Diagnosis as reported</dt><dd>{e.patient.diagnosis}</dd></div><div><dt>VWF variant</dt><dd><span class="variant">{e.patient.variant}</span></dd></div><div><dt>Bleeding assessment score</dt><dd>{e.patient.bleedingScore}</dd></div></dl>
           <div class="context-note"><h3>History &amp; presentation</h3><p>{e.patient.history}</p></div>
         </section>
         <section class="review-card"><p class="eyebrow">Scientific review</p><h3>{e.approval ? 'Reviewed example' : 'Awaiting editor review'}</h3><p>{e.approval ? `Reviewed by ${e.approval.reviewer} on ${e.approval.date}.` : 'This example remains a draft. The clinical interpretation, source linkage, and image presentation have not been approved for publication.'}</p>{__ATLAS_REVIEW__ && <details><summary>Content and image revision</summary><p class="small-note">Approval applies to this specific revision.</p><code>{e.revision}</code><p class="small-note">Source image SHA-256</p><code>{e.imageDigest}</code></details>}</section>

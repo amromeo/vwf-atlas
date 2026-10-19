@@ -103,3 +103,9 @@ Literature API access was restored on 2026-10-19. The bounded inventory is in `d
 The first implementation specification is `docs/plans/first-example-spec.md`, published as GitHub issue #1. The approved four-task breakdown is `docs/plans/first-example-ticket-proposal.md`, published as issues #2–#5. Scientific review will use the rendered local draft rather than require approval of raw Markdown before a review page exists. Production eligibility still requires scientific approval before release.
 
 Task #2 now provides the source-backed rendered draft and standalone review export. The software validation and independent reviews are recorded in `docs/reviews/task-1.md`. Scientific approval remains pending; the production build excludes the example and its image.
+
+## Requested refinements after rendered review
+
+The project owner requested a separate visual-style comparison task (#7) and an independent page for each patient pictured in the displayed Figure 1 (#8). Figure 1 contains patients 17, 18, 10, 9, and 19, plus NP references. The five patient records now use their own Table 1 data. Page-level crop windows show the selected patient beside a labeled NP reference without altering the source image; the complete figure remains available. Crop rectangles are part of revision-bound scientific review. A material arithmetic discrepancy in patient 19's source-reported ratios is explicitly flagged, not silently corrected.
+
+Style exploration is queued for comparison of three distinct directions before selecting a replacement design. No new visual style has been selected. All five patient pages remain drafts and excluded from production.

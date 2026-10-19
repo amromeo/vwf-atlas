@@ -2,7 +2,7 @@
 
 A literature-based visual atlas of von Willebrand factor multimer patterns, with the patient, laboratory, assay, and source context retained alongside each published example.
 
-The first source-backed example is implemented as a **draft for scientific review**. It has not been approved or deployed. Image enlargement/annotation controls, gallery filters, and Pages deployment are subsequent tickets #3–#5.
+Five patients pictured in the first source gel have independent pages as **drafts for scientific review**. Each shows patient/NP lane crop windows, patient-specific Table 1 values, and access to the complete source image. They have not been approved or deployed. Image enlargement/annotation controls, gallery filters, and Pages deployment are subsequent tickets #3–#5; comparing visual styles is ticket #7.
 
 ## Development
 
@@ -29,7 +29,7 @@ Browser checks use system Chromium when present. Otherwise install Playwright's 
 npm run export:review
 ```
 
-Open `artifacts/review/casonato-2017-patient-10.html` in a browser. It is a self-contained review copy with embedded styling and the original image, usable without the dev server. It contains draft material and is not a deployment artifact. Review exports and build outputs are ignored by Git. Regenerate the copy after content or presentation changes.
+Open `artifacts/review/index.html` in a browser and choose a patient. Each patient HTML file is self-contained, with embedded styling and source imagery, usable without the dev server. Keep all five files in the same folder for patient-to-patient navigation. These contain draft material and are not deployment artifacts. Review exports and build outputs are ignored by Git. Regenerate them after content or presentation changes.
 
 `npm run build:review` creates the complete draft-inclusive site in `dist-review`. `npm run preview:review` serves that build locally. Review builds/exports are refused in GitHub Actions. `npm run build` always uses the production configuration unless an explicit local `ATLAS_REVIEW=1` is set; deployment must use production output only. A production build currently contains the landing page and no unapproved example images.
 
@@ -37,7 +37,7 @@ Open `artifacts/review/casonato-2017-patient-10.html` in a browser. It is a self
 
 Edit the Markdown/frontmatter records in `content/examples/`. The first example comes from the checked extraction in `docs/research/examples/`; the source inventory and figure-specific provenance records remain under `docs/research/`.
 
-Frontmatter contains patient context, source locators, assay information, the source image, reuse terms, and laboratory values. Preserve result strings such as `>300` and source-specific reference intervals. Keep authors' findings separate from the atlas teaching commentary in the Markdown body. Use “not reported” only after the relevant source has actually been inspected; otherwise use “not reviewed.”
+Frontmatter contains patient context, source locators, assay information, the source image, source-pixel crop rectangles, reuse terms, and laboratory values. Crops are display windows into the unmodified source image; patient and NP retain the same vertical range and scale, with original lane labels. Changing a crop invalidates an existing approval. Preserve result strings such as `>300` and source-specific reference intervals. Keep authors' findings separate from the atlas teaching commentary in the Markdown body. Use “not reported” only after the relevant source has actually been inspected; otherwise use “not reviewed.” Preserve source `NA` as “not assessed” where the paper defines it that way.
 
 An example with `approval: null` is a draft. The review page's **Content and image revision** section identifies the revision being reviewed. After the project owner explicitly approves that content and image, record their reviewer name, ISO review date, and the displayed revision under `approval`. The assistant must not infer scientific approval from permission to build, a successful test, or a request for a visual change. Scientific metadata, prose, source-image, or reuse-information changes require a matching renewed approval; an outdated approval stops the build.
 

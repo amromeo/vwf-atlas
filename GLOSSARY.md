@@ -11,7 +11,7 @@ An observable distribution and structural appearance of VWF multimers, described
 A teaching and reference description of a multimer pattern, illustrated by one or more published examples and linked to associated conditions.
 
 **Published example**:
-An authentic multimer gel example from an identified publication, including a review article, retained with its source and reported clinical and laboratory context.
+A patient- or specimen-specific multimer example from an identified publication, including a review article, retained with its source and reported clinical and laboratory context. A multi-patient source figure can supply several independent examples, each with its own page and case data.
 
 **Example context**:
 The patient history, associated coagulation study results, assay details, and other relevant information reported for a specific published example. This context belongs to that example rather than to every example of the pattern.

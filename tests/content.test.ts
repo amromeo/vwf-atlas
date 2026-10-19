@@ -114,3 +114,95 @@ test("changing the original image invalidates an existing review", async () => {
     await rm(f.root, { recursive: true, force: true });
   }
 });
+
+test("each pictured Figure 1 patient has their own source-linked case and bounded crop", async () => {
+  const examples = await loadAtlas({ review: true });
+  const expected = [
+    {
+      id: 17,
+      age: "24 years",
+      variant: "p.V1316M",
+      antigen: "35.9",
+      platelets: "65",
+    },
+    {
+      id: 18,
+      age: "1 year",
+      variant: "p.V1316M",
+      antigen: "142.9",
+      platelets: "28",
+    },
+    {
+      id: 10,
+      age: "70 years",
+      variant: "p.R1308C",
+      antigen: "44.6",
+      platelets: "168",
+    },
+    {
+      id: 9,
+      age: "71 years",
+      variant: "p.R1308C",
+      antigen: "81.2",
+      platelets: "56",
+    },
+    {
+      id: 19,
+      age: "44 years",
+      variant: "p.R1306W",
+      antigen: "44.7",
+      platelets: "116",
+    },
+  ];
+  assert.equal(examples.length, 5);
+  for (const patient of expected) {
+    const entry = examples.find(
+      (e) => e.id === `casonato-2017-patient-${patient.id}`,
+    );
+    assert.ok(entry);
+    assert.equal(entry.patient.age, patient.age);
+    assert.equal(entry.patient.variant, patient.variant);
+    assert.equal(
+      entry.labs.find((r) => r.test === "VWF:Ag")?.result,
+      patient.antigen,
+    );
+    assert.equal(
+      entry.labs.find((r) => r.test === "Platelet count")?.result,
+      patient.platelets,
+    );
+    assert.equal(entry.approval, null);
+    assert.ok(entry.image.crop.patient.x !== entry.image.crop.control.x);
+    for (const rect of [entry.image.crop.patient, entry.image.crop.control]) {
+      assert.ok(rect.x >= 0 && rect.y >= 0);
+      assert.ok(rect.x + rect.width <= entry.image.width);
+      assert.ok(rect.y + rect.height <= entry.image.height);
+    }
+  }
+});
+
+test("out-of-bounds crops are rejected and changing a valid crop invalidates approval", async () => {
+  const f = await fixture();
+  try {
+    const [draft] = await loadAtlas({ root: f.root, review: true });
+    const original = f.data.image.crop.patient.x;
+    f.data.image.crop.patient.x = 744;
+    await f.write();
+    await assert.rejects(
+      loadAtlas({ root: f.root, review: true }),
+      /Crop rectangle exceeds/,
+    );
+    f.data.image.crop.patient.x = original;
+    f.data.approval = {
+      reviewer: "Test fixture reviewer",
+      date: "2026-10-19",
+      revision: draft.revision,
+    };
+    await f.write();
+    assert.equal((await loadAtlas({ root: f.root })).length, 1);
+    f.data.image.crop.patient.x += 1;
+    await f.write();
+    await assert.rejects(loadAtlas({ root: f.root }), /approval.*revision/i);
+  } finally {
+    await rm(f.root, { recursive: true, force: true });
+  }
+});

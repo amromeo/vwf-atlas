@@ -1,0 +1,101 @@
+.patient-links {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 25px;
+}
+.patient-links > span {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-right: 8px;
+}
+.patient-links a {
+  font-size: 0.73rem;
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  text-decoration: none;
+  background: #fff;
+}
+.patient-links a[aria-current="page"] {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #fff;
+}
+.patient-crops {
+  display: flex;
+  justify-content: center;
+  gap: 45px;
+  background: #f1f3f1;
+  padding: 25px 24px 20px;
+}
+.lane-panel {
+  min-width: 85px;
+}
+.lane-panel h3 {
+  font-size: 0.8rem;
+  margin: 0 0 3px;
+}
+.lane-panel > p {
+  font-size: 0.66rem;
+  color: var(--muted);
+  margin: 0 0 14px;
+}
+.lane-viewport {
+  position: relative;
+  overflow: hidden;
+  background: white;
+}
+.lane-viewport img {
+  position: absolute;
+  display: block;
+  max-width: none;
+}
+.complete-figure {
+  margin-top: 22px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: white;
+}
+.complete-figure summary {
+  padding: 15px 17px;
+  color: var(--teal);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.complete-figure > .small-note {
+  padding: 0 16px 10px;
+}
+.source-issues {
+  padding: 18px 22px;
+  background: #faf5e7;
+  border: 1px solid #e9dec2;
+  color: #755524;
+  border-radius: 4px;
+  margin-bottom: 30px;
+  font-size: 0.82rem;
+}
+.source-issues p {
+  margin: 8px 0 0;
+}
+.patient-crops img {
+  object-fit: fill;
+}
+@media (max-width: 760px) {
+  .patient-crops {
+    gap: 25px;
+    padding: 22px 15px 15px;
+  }
+  .patient-links > span {
+    flex-basis: 100%;
+    margin-bottom: 3px;
+  }
+  .patient-links a {
+    font-size: 0.67rem;
+    padding: 6px 9px;
+  }
+  .lane-panel > p {
+    font-size: 0.61rem;
+  }
+}
