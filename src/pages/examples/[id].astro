@@ -1,0 +1,64 @@
+---
+import AtlasLayout from '../../layouts/AtlasLayout.astro';
+import { loadAtlas, type AtlasExample } from '../../lib/content';
+export async function getStaticPaths() {
+  return (await loadAtlas({ review: __ATLAS_REVIEW__ })).map((example) => ({ params: { id: example.id }, props: { example } }));
+}
+interface Props { example: AtlasExample }
+const { example: e } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const imageUrl = `${base}/media/${e.imageName}`;
+---
+<AtlasLayout title={e.title}>
+  <div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={`${base}/`}>Atlas</a><span aria-hidden="true">/</span><span>Published example</span></nav>
+    {!e.approval && <aside class="draft-banner" aria-label="Scientific review status"><span class="status-dot" aria-hidden="true"></span><strong>Draft for scientific review</strong><span>Interpretation and presentation await the scientific editor’s approval.</span></aside>}
+    <div class="example-heading">
+      <p class="eyebrow">VWF multimer pattern <span>·</span> Published example</p>
+      <h1>{e.title}</h1>
+      <p class="standfirst">{e.summary}</p>
+      <div class="tags"><span>{e.conditions[0]}</span><span>{e.patient.label}</span><span>{e.source.shortCitation}</span></div>
+    </div>
+    <div class="example-grid">
+        <section class="figure-section" aria-labelledby="figure-title">
+          <div class="section-heading"><div><p class="eyebrow">01 / Source image</p><h2 id="figure-title">The multimer gel</h2></div><a class="quiet-link" href={imageUrl} target="_blank" rel="noopener">Open original image <span aria-hidden="true">↗</span></a></div>
+          <figure class="gel-figure">
+            <div class="gel-canvas"><img src={imageUrl} alt={e.image.alt} width={e.image.width} height={e.image.height} fetchpriority="high" /></div>
+            <figcaption>{e.image.caption}</figcaption>
+          </figure>
+          <p class="figure-credit">{e.rights.attribution} <a href={e.rights.url}>{e.rights.label}</a>. {e.rights.modifications}</p>
+          <div class="lane-note"><span class="note-mark" aria-hidden="true">↳</span><p>{e.image.focus}</p></div>
+        </section>
+      <aside class="case-sidebar" aria-labelledby="case-title">
+        <section class="case-card">
+          <p class="eyebrow">The published case</p><h2 id="case-title">{e.patient.label}</h2>
+          <div class="patient-demographics"><span>{e.patient.age}</span><span>{e.patient.sex}</span><span>Group {e.patient.bloodGroup}</span></div>
+          <dl class="case-facts"><div><dt>Diagnosis as reported</dt><dd>{e.patient.diagnosis}</dd></div><div><dt>VWF variant</dt><dd><span class="variant">{e.patient.variant}</span></dd></div><div><dt>Bleeding assessment score</dt><dd>{e.patient.bleedingScore}</dd></div></dl>
+          <div class="context-note"><h3>History &amp; presentation</h3><p>{e.patient.history}</p></div>
+        </section>
+        <section class="review-card"><p class="eyebrow">Scientific review</p><h3>{e.approval ? 'Reviewed example' : 'Awaiting editor review'}</h3><p>{e.approval ? `Reviewed by ${e.approval.reviewer} on ${e.approval.date}.` : 'This example remains a draft. The clinical interpretation, source linkage, and image presentation have not been approved for publication.'}</p>{__ATLAS_REVIEW__ && <details><summary>Content and image revision</summary><p class="small-note">Approval applies to this specific revision.</p><code>{e.revision}</code><p class="small-note">Source image SHA-256</p><code>{e.imageDigest}</code></details>}</section>
+      </aside>
+      <article class="example-main" aria-label="Interpretation and evidence">
+        <section class="interpretation prose" aria-label="Teaching commentary" set:html={e.html} />
+        <section class="labs-section" aria-labelledby="labs-title">
+          <p class="eyebrow">02 / Patient-specific evidence</p><h2 id="labs-title">Laboratory findings</h2>
+          <p>Transcribed from {e.source.table}. Ratios are retained as reported, not recalculated.</p>
+          <div class="table-wrap"><table><caption>{e.patient.label} laboratory results and the publication’s reference intervals</caption><thead><tr><th scope="col">Test</th><th scope="col">Result</th><th scope="col">Units</th><th scope="col">Source reference</th></tr></thead><tbody>{e.labs.map((row) => <tr><th scope="row">{row.test}</th><td class="lab-result">{row.result}</td><td>{row.units}</td><td>{row.reference}</td></tr>)}</tbody></table></div>
+          <p class="small-note">Reference intervals are source-specific. They are not universal diagnostic thresholds.</p>
+        </section>
+        <section class="method-section" aria-labelledby="method-title">
+          <p class="eyebrow">03 / Reading the assay</p><h2 id="method-title">Method &amp; controls</h2>
+          <dl class="method-list"><div><dt>Multimer method</dt><dd>{e.assay.method}</dd></div><div><dt>Specimen</dt><dd>{e.assay.specimen}</dd></div><div><dt>Lane identities</dt><dd>{e.assay.lanes}</dd></div><div><dt>Normal reference</dt><dd>{e.assay.control}</dd></div><div><dt>Limits of the record</dt><dd>{e.assay.limitations}</dd></div></dl>
+        </section>
+        <section class="source-section" aria-labelledby="source-title">
+          <p class="eyebrow">04 / Trace the evidence</p><h2 id="source-title">Publication &amp; provenance</h2>
+          <p class="citation">{e.source.citation}</p>
+          <a class="source-button" href={e.source.url}>Read the original publication <span aria-hidden="true">↗</span></a>
+          <dl class="source-details"><div><dt>DOI</dt><dd>{e.source.doi}</dd></div><div><dt>PMID</dt><dd>{e.source.pmid}</dd></div><div><dt>Figure</dt><dd>{e.source.figure}</dd></div><div><dt>Source inspected</dt><dd>{e.source.accessed}</dd></div></dl>
+          <p>{e.rights.evidence}</p>
+          <p class="rights-note">This third-party figure is excluded from the atlas’s CC0 grant. Its attribution and source license remain applicable.</p>
+        </section>
+      </article>
+    </div>
+  </div>
+</AtlasLayout>

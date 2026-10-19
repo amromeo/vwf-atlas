@@ -1,0 +1,15 @@
+---
+import { loadAtlas } from '../lib/content';
+const examples = await loadAtlas({ review: __ATLAS_REVIEW__ });
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width" /><title>VWF Atlas</title></head>
+  <body>
+    <h1>VWF Atlas</h1>
+    <p>A visual reference to von Willebrand factor multimers.</p>
+    <ul>{examples.map((example) => <li><a href={`${base}/examples/${example.id}/`}>{example.title}</a></li>)}</ul>
+    {!examples.length && <p>Examples will be available after scientific review.</p>}
+  </body>
+</html>
