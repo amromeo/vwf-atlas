@@ -9,6 +9,5 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const GET: APIRoute = ({ props }) => {
   const { example } = props;
-  const type = example.imageName.endsWith('.png') ? 'image/png' : example.imageName.endsWith('.webp') ? 'image/webp' : 'image/jpeg';
-  return new Response(new Uint8Array(example.imageBytes), { headers: { 'Content-Type': type } });
+  return new Response(new Uint8Array(example.imageBytes), { headers: { 'Content-Type': example.imageType } });
 };

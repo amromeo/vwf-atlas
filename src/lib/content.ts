@@ -6,6 +6,11 @@ import { marked } from "marked";
 import { z } from "zod";
 
 const text = z.string().trim().min(1);
+const imageTypes: Record<string, string> = {
+  ".jpg": "image/jpeg",
+  ".png": "image/png",
+  ".webp": "image/webp",
+};
 const https = z.url({ protocol: /^https$/ });
 const schema = z
   .object({
@@ -83,10 +88,11 @@ export async function loadAtlas({ root = process.cwd(), review = false } = {}) {
     ids.add(meta.id);
     const imagePath = await realpath(join(root, meta.image.file));
     const assetRelative = relative(assets, imagePath);
+    const imageType = imageTypes[extname(imagePath)];
     if (
       assetRelative.startsWith("..") ||
       isAbsolute(assetRelative) ||
-      ![".jpg", ".png", ".webp"].includes(extname(imagePath))
+      !imageType
     ) {
       throw new Error(
         `${name}: source images must be inside the research asset directory.`,
@@ -114,6 +120,7 @@ export async function loadAtlas({ root = process.cwd(), review = false } = {}) {
         revision,
         imageDigest,
         imageName: imageDigest + extname(imagePath),
+        imageType,
         imageBytes,
       });
   }

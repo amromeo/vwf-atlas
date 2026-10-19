@@ -1,6 +1,6 @@
 # VWF atlas definition
 
-Status: confirmed by the project owner on 2026-10-19. The first representative example is extracted; specification is recorded and the implementation ticket breakdown is awaiting review.
+Status: confirmed by the project owner on 2026-10-19. The first representative example is rendered for local scientific review. The specification and four implementation tickets are published; task #2 is implemented, with #3–#5 remaining.
 
 ## Confirmed decisions
 
@@ -100,4 +100,6 @@ Exact source selection, package versions, field encoding, and test commands are 
 
 Literature API access was restored on 2026-10-19. The bounded inventory is in `docs/research/literature-inventory.md`. The recommended first authentic-gel example is Casonato et al. (2017), Figure 1, patient 10; its case extraction and proposed teaching commentary are in `docs/research/examples/casonato-2017-patient-10.md`. Unmodified source figures and their separate CC BY 4.0 provenance record are retained as research assets. Scientific editor review is pending; no atlas content has been approved for publication or deployed.
 
-The first implementation specification is `docs/plans/first-example-spec.md`, published as GitHub issue #1. The proposed four-task breakdown is `docs/plans/first-example-ticket-proposal.md`; child tickets await the owner's review under `to-tickets`. Scientific review will use the rendered local draft rather than require approval of raw Markdown before a review page exists. Production eligibility still requires scientific approval before release.
+The first implementation specification is `docs/plans/first-example-spec.md`, published as GitHub issue #1. The approved four-task breakdown is `docs/plans/first-example-ticket-proposal.md`, published as issues #2–#5. Scientific review will use the rendered local draft rather than require approval of raw Markdown before a review page exists. Production eligibility still requires scientific approval before release.
+
+Task #2 now provides the source-backed rendered draft and standalone review export. The software validation and independent reviews are recorded in `docs/reviews/task-1.md`. Scientific approval remains pending; the production build excludes the example and its image.

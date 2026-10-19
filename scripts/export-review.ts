@@ -22,12 +22,7 @@ for (const entry of entries) {
     const css = await readFile(join("dist-review", cssPath), "utf8");
     html = html.replace(tag[0], `<style>${css}</style>`);
   }
-  const type = entry.imageName.endsWith(".png")
-    ? "image/png"
-    : entry.imageName.endsWith(".webp")
-      ? "image/webp"
-      : "image/jpeg";
-  const image = `data:${type};base64,${entry.imageBytes.toString("base64")}`;
+  const image = `data:${entry.imageType};base64,${entry.imageBytes.toString("base64")}`;
   html = html.replaceAll(`${base}/media/${entry.imageName}`, image);
   html = html.replaceAll(`href="${base}/"`, 'href="#main"');
   html = html.replace(
