@@ -1,15 +1,18 @@
 ---
 import { loadAtlas } from '../lib/content';
+import HomepagePrototype from '../components/prototypes/HomepagePrototype.astro';
 const examples = await loadAtlas({ review: __ATLAS_REVIEW__ });
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <!doctype html>
 <html lang="en">
-  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width" /><title>VWF Atlas</title></head>
+  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />{__ATLAS_REVIEW__ && <meta name="robots" content="noindex, nofollow" />}<title>VWF Atlas</title></head>
   <body>
+    {__ATLAS_REVIEW__ ? <HomepagePrototype entries={examples}/> : <>
     <h1>VWF Atlas</h1>
     <p>A visual reference to von Willebrand factor multimers.</p>
     <ul>{examples.map((example) => <li><a href={`${base}/examples/${example.id}/`}>{example.title}</a></li>)}</ul>
     {!examples.length && <p>Examples will be available after scientific review.</p>}
+    </>}
   </body>
 </html>

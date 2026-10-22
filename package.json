@@ -14,6 +14,7 @@
     "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
     "test": "tsx --test tests/*.test.ts",
     "test:browser": "playwright test",
+    "prototype": "npm run dev",
     "export:review": "npm run build:review && tsx scripts/export-review.ts"
   },
   "dependencies": {
