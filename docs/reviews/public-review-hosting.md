@@ -1,4 +1,4 @@
-# Public review hosting: prepared, awaiting Pages enablement
+# Public review hosting: live and verified
 
 The owner requested deployed review pages. The generated public review artifact has been uploaded to the `review-site` branch at commit `a01e1445629232c0ae16eff012bf2515f59f3006`.
 
@@ -6,15 +6,15 @@ The branch contains only `index.html`, five self-contained patient HTML files, `
 
 Independent Standards and Spec review found no material issues in the public-review exception, navigation change, or draft-label/indexing additions. Local export generation completed, and all six documents were checked for internal link targets, draft labels, and indexing metadata.
 
-## External blocker
+## Deployment verification
 
-Attempting `POST /repos/amromeo/vwf-atlas/pages` with a branch-root source failed with HTTP 403 and `Resource not accessible by integration`. The repository is public and the connection can push branches, but that does not establish permission to enable GitHub Pages. Requests to the expected public-site address reach GitHub and return 404; this is not the earlier proxy CONNECT failure. No live site or successful Pages build has been claimed.
+The owner enabled GitHub Pages using **Deploy from a branch**, branch **review-site**, folder **/(root)**. The earlier integration HTTP 403 prevented automated settings changes; the owner action resolved that blocker.
 
-## One-time owner action
+Live review site: https://amromeo.github.io/vwf-atlas/
 
-Open [repository Pages settings](https://github.com/amromeo/vwf-atlas/settings/pages). Under Build and deployment, select **Deploy from a branch**, choose branch **review-site** and folder **/(root)**, and save. This publishes the explicitly requested public draft review version, not a scientifically approved atlas release.
+GitHub Pages reports `status: built` for commit `a01e1445629232c0ae16eff012bf2515f59f3006`, with branch-root deployment from `review-site`. Live HTTP checks returned 200 for the homepage and all five patient pages. Each document contains its draft label, noindex metadata, and patient navigation. All five patient pages include three valid embedded JPEG images, the complete source figure, and CC BY 4.0 attribution. This deployment is the owner-requested public draft review version; scientific approval remains pending.
 
-After that setting is saved, inspect the actual Pages build and verify the live index, all five patient pages, navigation, images, source links, and draft status before reporting availability. Expected project address: `https://amromeo.github.io/vwf-atlas/`; treat it as pending until it responds with the correct review content.
+The additional live Chromium check was blocked by this cloud browser’s certificate trust (`ERR_CERT_AUTHORITY_INVALID`); no browser trust settings were changed. Live availability and embedded-image checks above used the successful HTTP checks. Local browser journeys had already passed before publishing.
 
 ## Updating review content later
 
