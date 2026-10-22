@@ -96,3 +96,7 @@ Human scientific review verifies source fidelity, interpretation, caveats, and t
 ## Further Notes
 
 The product design was confirmed by the project owner on 2026-10-19. Literature API access is working. Six source records are inventoried; the first candidate's actual gel was visually inspected, patient 10's source row checked, and unmodified images retained with provenance and checksums. This spec authorizes building the review experience; it does not mark the scientific content approved or authorize publication of a draft.
+
+### Subsequent owner-requested public review exception
+
+The owner later requested deployed web pages for scientific/design review. That request supersedes the local-only hosting restriction for the explicitly labeled public review copies only. These may be hosted from the separate `review-site` branch on GitHub Pages. Scientific approvals remain pending, and the application's normal production build still excludes all unapproved records and assets. Public review hosting does not constitute an approved atlas release or permission to merge the implementation PR.

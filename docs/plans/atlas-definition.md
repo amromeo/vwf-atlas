@@ -109,3 +109,9 @@ Task #2 now provides the source-backed rendered draft and standalone review expo
 The project owner requested a separate visual-style comparison task (#7) and an independent page for each patient pictured in the displayed Figure 1 (#8). Figure 1 contains patients 17, 18, 10, 9, and 19, plus NP references. The five patient records now use their own Table 1 data. Page-level crop windows show the selected patient beside a labeled NP reference without altering the source image; the complete figure remains available. Crop rectangles are part of revision-bound scientific review. A material arithmetic discrepancy in patient 19's source-reported ratios is explicitly flagged, not silently corrected.
 
 Style exploration is queued for comparison of three distinct directions before selecting a replacement design. No new visual style has been selected. All five patient pages remain drafts and excluded from production.
+
+## Public review hosting requested by the owner
+
+The owner subsequently requested a deployed web page as the easiest review environment. Public draft review hosting on GitHub Pages is therefore authorized as a change to the earlier local-only review plan. Publish the generated, self-contained review copies on a dedicated `review-site` branch, with visible draft/scientific-review labels and indexing discouraged. This is a public review version, not scientific approval or a finalized atlas release.
+
+Keep the normal application's approval checks and production draft exclusion intact. All five approval records remain null. Do not merge the implementation PR or change scientific approval merely to host the review version. The review version can be replaced or disabled independently; a later approved atlas deployment remains a separate release step.

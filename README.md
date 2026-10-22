@@ -43,6 +43,12 @@ An example with `approval: null` is a draft. The review page's **Content and ima
 
 Source images are kept outside automatic public-copy directories. Only images referenced by eligible records receive production routes. Tests exercise approved and draft records together and scan generated files for draft-only text and imagery. This controls deployed-site visibility; files committed to a public repository are still public.
 
+## Public draft review site
+
+At the owner's subsequent request, GitHub Pages can host the generated review copies from a dedicated `review-site` branch. This is an explicitly labeled public scientific/design review version; records remain unapproved. The usual production build and its draft-exclusion checks are unchanged. Review copies must still be generated locally, and public review publication is an intentional separate action, not an automatic consequence of a source-code merge.
+
+Generate current copies with `npm run export:review`. Publish only the six HTML files from `artifacts/review/` (index plus five patients), `.nojekyll`, and a `robots.txt` discouraging indexing to the root of `review-site`. Configure repository Pages to build that branch's root. Verify the actual Pages build and each live patient link after updating it. The source PR remains a draft; hosting review copies does not approve the scientific content or merge that PR.
+
 ## Licenses
 
 Original project code and text use the repository's CC0 grant. **Third-party figures are excluded from that grant.** The retained Casonato figures are under CC BY 4.0, with full attribution and checksums in `docs/research/assets/casonato-2017/README.md`. The rendered page displays the figure's source, terms, and modifications. Other source figures require their own documented reuse basis.
