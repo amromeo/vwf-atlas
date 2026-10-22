@@ -42,4 +42,3 @@ for (const document of [
   await writeFile(path, html);
   console.log(`Self-contained review copy: ${path}`);
 }
-
