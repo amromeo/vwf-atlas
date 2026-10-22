@@ -19,3 +19,7 @@ The additional live Chromium check was blocked by this cloud browser’s certifi
 ## Updating review content later
 
 Regenerate using `npm run export:review`. Keep publication confined to the explicit review branch and retain its prior commit as the parent of subsequent updates so history remains recoverable. Do not force-push, merge the source PR, or approve scientific content merely to update the review site. The normal application production build continues to exclude unapproved records and images.
+
+## Homepage style exploration update
+
+The three owner-requested design concepts were published as review commit `882c84635efb097f6221ebf4d6361dac4141e58e`, retaining the previous review deployment as its parent. Source: `codex/style-exploration`; review evidence: `docs/reviews/style-exploration.md`. The homepage switcher uses `?variant=A` (Clinical reference), `?variant=B` (Visual gallery), and `?variant=C` (Editorial atlas). The owner has not selected a final design. Scientific approvals remain null.
