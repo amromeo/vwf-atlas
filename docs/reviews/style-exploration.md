@@ -31,3 +31,7 @@ Standards: 0 findings; no blocking issue. Spec: 0 findings; no missing or incorr
 - Visually inspected screenshots of desktop Clinical reference and Editorial atlas and mobile Visual gallery. Screenshots for all six variant/width combinations are local artifacts under `artifacts/review/concept-*.png`.
 
 No new permanent tests were added for the throwaway UI, following the prototype skill. Owner preference and scientific approval remain pending.
+
+## Published verification
+
+GitHub Pages reports `built` for review commit `882c84635efb097f6221ebf4d6361dac4141e58e`. The public homepage and all five patient pages returned HTTP 200 and matched the checked local export byte-for-byte. Only `index.html` changed in the review deployment; existing patient pages were preserved. The previous deployment remains the new commit’s parent.
