@@ -89,6 +89,12 @@ test(
         }
       }
       await collect(join(root, "dist"));
+      const homepage = outputs.find(file => file.path === join(root, "dist/index.html"));
+      assert.ok(homepage, "The atlas homepage must publish.");
+      assert.match(homepage.bytes.toString(), /\/vwf-atlas\/examples\/approved-fixture\//);
+      assert.match(homepage.bytes.toString(), /Scientifically reviewed/);
+      assert.doesNotMatch(homepage.bytes.toString(), /Design concept switcher|data-variant/);
+      assert.doesNotMatch(homepage.bytes.toString(), /\/examples\/casonato-2017-patient-/);
       const example = outputs.find((file) =>
         file.path.endsWith("/examples/approved-fixture/index.html"),
       );

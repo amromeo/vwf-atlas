@@ -1,5 +1,6 @@
 ---
 import AtlasLayout from '../../layouts/AtlasLayout.astro';
+import PatientLanes from '../../components/PatientLanes.astro';
 import { loadAtlas, type AtlasExample } from '../../lib/content';
 export async function getStaticPaths() {
   const examples = await loadAtlas({ review: __ATLAS_REVIEW__ });
@@ -9,11 +10,7 @@ interface Props { example: AtlasExample; siblings: AtlasExample[] }
 const { example: e, siblings } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const imageUrl = `${base}/media/${e.imageName}`;
-const scale = 1.1;
-const lanes = [
-  { rect: e.image.crop.control, title: 'Normal reference', label: `NP · source lane ${e.image.crop.controlLane}`, alt: `NP reference lane ${e.image.crop.controlLane}, cropped from original Figure 1` },
-  { rect: e.image.crop.patient, title: e.patient.label, label: `Source lane ${e.image.crop.patientLane}`, alt: `${e.patient.label} lane, cropped from original Figure 1` },
-];
+
 ---
 <AtlasLayout title={`${e.title} — ${e.patient.label}`}>
   <div class="page-wrap">
@@ -31,7 +28,7 @@ const lanes = [
         <section class="figure-section" aria-labelledby="figure-title">
           <div class="section-heading"><div><p class="eyebrow">01 / Source image</p><h2 id="figure-title">The multimer gel</h2></div><a class="quiet-link" href={imageUrl} target="_blank" rel="noopener">Open original image <span aria-hidden="true">↗</span></a></div>
           <figure class="gel-figure">
-            <div class="patient-crops">{lanes.map((lane) => <div class="lane-panel"><h3>{lane.title}</h3><p>{lane.label}</p><div class="lane-viewport" style={`width:${lane.rect.width*scale}px;height:${lane.rect.height*scale}px;`}><img src={imageUrl} alt={lane.alt} width={e.image.width} height={e.image.height} fetchpriority="high" style={`width:${e.image.width*scale}px;height:${e.image.height*scale}px;left:${-lane.rect.x*scale}px;top:${-lane.rect.y*scale}px;`} /></div></div>)}</div>
+            <PatientLanes example={e} />
             <figcaption>{e.image.caption}</figcaption>
           </figure>
           <p class="figure-credit">{e.rights.attribution} <a href={e.rights.url}>{e.rights.label}</a>. {e.rights.modifications}</p>

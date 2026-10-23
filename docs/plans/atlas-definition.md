@@ -108,7 +108,7 @@ Task #2 now provides the source-backed rendered draft and standalone review expo
 
 The project owner requested a separate visual-style comparison task (#7) and an independent page for each patient pictured in the displayed Figure 1 (#8). Figure 1 contains patients 17, 18, 10, 9, and 19, plus NP references. The five patient records now use their own Table 1 data. Page-level crop windows show the selected patient beside a labeled NP reference without altering the source image; the complete figure remains available. Crop rectangles are part of revision-bound scientific review. A material arithmetic discrepancy in patient 19's source-reported ratios is explicitly flagged, not silently corrected.
 
-Style exploration is queued for comparison of three distinct directions before selecting a replacement design. No new visual style has been selected. All five patient pages remain drafts and excluded from production.
+The owner reviewed three deployed visual concepts and selected **A — Clinical reference**. The selected homepage uses a collection sidebar, compact patient table, and featured pattern with evidence. The other concepts are archived on `codex/style-exploration`; the implementation removes the switcher. All five patient pages remain drafts and excluded from production. See `docs/plans/clinical-homepage.md`.
 
 ## Public review hosting requested by the owner
 

@@ -27,7 +27,6 @@ for (const document of [
     html = html.replaceAll(`${base}/media/${entry.imageName}`, image);
   }
   html = html.replaceAll(`href="${base}/"`, 'href="index.html"');
-  html = html.replaceAll(`href="${base}/?variant=`, 'href="index.html?variant=');
   for (const sibling of entries) {
     html = html.replaceAll(
       `href="${base}/examples/${sibling.id}/"`,

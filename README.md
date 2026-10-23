@@ -53,8 +53,8 @@ Generate current copies with `npm run export:review`. Publish only the six HTML 
 
 Original project code and text use the repository's CC0 grant. **Third-party figures are excluded from that grant.** The retained Casonato figures are under CC BY 4.0, with full attribution and checksums in `docs/research/assets/casonato-2017/README.md`. The rendered page displays the figure's source, terms, and modifications. Other source figures require their own documented reuse basis.
 
-### Homepage design exploration
+### Homepage design
 
-The throwaway `codex/style-exploration` branch offers three review-only homepage concepts. Run `npm run prototype`, or open the [deployed review homepage](https://amromeo.github.io/vwf-atlas/?variant=A). Use the floating A/B/C switcher to compare Clinical reference, Visual gallery, and Editorial atlas. The query parameter preserves the selected concept when sharing a link.
+The owner selected **A — Clinical reference**: a collection sidebar, compact patient table, and featured pattern with patient and laboratory evidence. Open the [review homepage](https://amromeo.github.io/vwf-atlas/), or run `npm run dev` locally. The design switcher has been removed.
 
-See `docs/plans/style-exploration.md` for scope. The concepts await the owner's choice; scientific records remain drafts and the normal production build excludes the exploration.
+The complete three-concept prototype is preserved on `codex/style-exploration` at commit `9559d78`; it is absent from the implementation branch. See `docs/plans/clinical-homepage.md` for the selected design. Scientific records remain drafts until explicitly approved; production displays only eligible records and an empty state when none are approved.

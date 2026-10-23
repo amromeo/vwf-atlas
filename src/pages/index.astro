@@ -1,18 +1,83 @@
 ---
+import AtlasLayout from '../layouts/AtlasLayout.astro';
+import FeaturedExample from '../components/FeaturedExample.astro';
 import { loadAtlas } from '../lib/content';
-import HomepagePrototype from '../components/prototypes/HomepagePrototype.astro';
+import '../styles/home.css';
+
 const examples = await loadAtlas({ review: __ATLAS_REVIEW__ });
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const sources = new Set(examples.map(example => example.source.doi));
+const patterns = [...new Set(examples.map(example => example.pattern.id))].map(id => {
+  const entries = examples.filter(example => example.pattern.id === id).sort((a, b) =>
+    a.source.doi.localeCompare(b.source.doi) || a.image.crop.patient.x - b.image.crop.patient.x,
+  );
+  return { id, label: entries[0].pattern.label, entries };
+});
+const featured = examples[0];
 ---
-<!doctype html>
-<html lang="en">
-  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />{__ATLAS_REVIEW__ && <meta name="robots" content="noindex, nofollow" />}<title>VWF Atlas</title></head>
-  <body>
-    {__ATLAS_REVIEW__ ? <HomepagePrototype entries={examples}/> : <>
-    <h1>VWF Atlas</h1>
-    <p>A visual reference to von Willebrand factor multimers.</p>
-    <ul>{examples.map((example) => <li><a href={`${base}/examples/${example.id}/`}>{example.title}</a></li>)}</ul>
-    {!examples.length && <p>Examples will be available after scientific review.</p>}
-    </>}
-  </body>
-</html>
+<AtlasLayout title="VWF Multimer Atlas" collectionNavigation={examples.length > 0}>
+  <div class="atlas-home">
+    <aside class="home-sidebar" aria-label="Atlas collection">
+      <p class="eyebrow">In this collection</p>
+      <h2>Multimer patterns</h2>
+      <nav aria-label="Multimer patterns">
+        {patterns.map(pattern => (
+          <a href={`#pattern-${pattern.id}`}><span>{pattern.label}</span><span>{pattern.entries.length}</span></a>
+        ))}
+      </nav>
+      <p class="small-note">
+        {examples.length
+          ? `${examples.length} published patient records from ${sources.size} ${sources.size === 1 ? 'source study' : 'source studies'}.`
+          : 'The collection is awaiting scientific review.'}
+      </p>
+      <div class="home-reading-note">
+        <p class="eyebrow">Read in context</p>
+        <p>Every gel is linked to the patient, laboratory findings, assay, and original publication.</p>
+      </div>
+    </aside>
+    <div class="home-main">
+      {__ATLAS_REVIEW__ && examples.some(example => !example.approval) && (
+        <aside class="draft-banner" aria-label="Scientific review status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <strong>Draft for scientific review</strong>
+          <span>Patient records await the scientific editor’s approval.</span>
+        </aside>
+      )}
+      <div class="home-intro">
+        <p class="eyebrow">A literature-based visual reference</p>
+        <h1>VWF Multimer Atlas</h1>
+        <p>Explore multimer patterns with the clinical and laboratory evidence that gives them meaning.</p>
+      </div>
+      {examples.length ? (
+        <section id="patient-records" aria-labelledby="records-title">
+          <div class="home-section-heading">
+            <h2 id="records-title">Published patient records</h2>
+            <span>{examples.length} records · {sources.size} {sources.size === 1 ? 'source' : 'sources'}</span>
+          </div>
+          {patterns.map(pattern => (
+            <section id={`pattern-${pattern.id}`} aria-label={pattern.label}>
+              {patterns.length > 1 && <h3>{pattern.label}</h3>}
+              <div class="table-wrap home-records-wrap">
+                <table class="home-records">
+                  <caption>Published patient records — {pattern.label}</caption>
+                  <thead><tr><th scope="col">Patient</th><th scope="col">Age / sex</th><th scope="col">VWF variant</th><th scope="col">Source</th></tr></thead>
+                  <tbody>
+                    {pattern.entries.map(example => (
+                      <tr>
+                        <th scope="row"><a href={`${base}/examples/${example.id}/`}>{example.patient.label}</a></th>
+                        <td>{example.patient.age} · {example.patient.sex}</td>
+                        <td><code>{example.patient.variant}</code></td>
+                        <td>{example.source.shortCitation}<small>{example.approval ? 'Scientifically reviewed' : 'Draft for scientific review'}</small></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          ))}
+        </section>
+      ) : <p class="home-empty">Examples will be available after scientific review.</p>}
+      {featured && <FeaturedExample example={featured} />}
+    </div>
+  </div>
+</AtlasLayout>

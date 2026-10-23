@@ -1,0 +1,42 @@
+---
+import type { AtlasExample } from '../lib/content';
+
+interface Props {
+  example: AtlasExample;
+  scale?: number;
+}
+const { example, scale = 1.1 } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const lanes = [
+  {
+    rect: example.image.crop.control,
+    title: 'Normal reference',
+    label: `NP · source lane ${example.image.crop.controlLane}`,
+    alt: `NP reference lane ${example.image.crop.controlLane}, cropped from original Figure 1`,
+  },
+  {
+    rect: example.image.crop.patient,
+    title: example.patient.label,
+    label: `Source lane ${example.image.crop.patientLane}`,
+    alt: `${example.patient.label} lane, cropped from original Figure 1`,
+  },
+];
+---
+<div class="patient-crops">
+  {lanes.map(({ rect, title, label, alt }) => (
+    <div class="lane-panel">
+      <h3>{title}</h3>
+      <p>{label}</p>
+      <div class="lane-viewport" style={`width:${rect.width * scale}px;height:${rect.height * scale}px;`}>
+        <img
+          src={`${base}/media/${example.imageName}`}
+          alt={alt}
+          width={example.image.width}
+          height={example.image.height}
+          fetchpriority="high"
+          style={`width:${example.image.width * scale}px;height:${example.image.height * scale}px;left:${-rect.x * scale}px;top:${-rect.y * scale}px;`}
+        />
+      </div>
+    </div>
+  ))}
+</div>

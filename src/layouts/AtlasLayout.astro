@@ -1,8 +1,8 @@
 ---
 import '../styles/atlas.css';
 import '../styles/patient-crops.css';
-interface Props { title: string }
-const { title } = Astro.props;
+interface Props { title: string; collectionNavigation?: boolean }
+const { title, collectionNavigation = false } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <!doctype html>
@@ -18,7 +18,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
       <a class="brand" href={`${base}/`} aria-label="VWF Atlas home"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span>VWF <b>ATLAS</b></span></a>
-      <span class="header-description">A visual reference to multimer patterns</span>
+      {collectionNavigation ? <nav class="collection-nav" aria-label="Atlas navigation"><a href="#patient-records">Patient records</a><a href="#featured-example">Featured pattern</a></nav> : <span class="header-description">A visual reference to multimer patterns</span>}
       {__ATLAS_REVIEW__ && <span class="review-pill">Review edition</span>}
     </header>
     <main id="main"><slot /></main>

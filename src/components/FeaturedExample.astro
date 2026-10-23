@@ -1,0 +1,64 @@
+---
+import type { AtlasExample } from '../lib/content';
+import PatientLanes from './PatientLanes.astro';
+
+interface Props { example: AtlasExample }
+const { example } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const patientUrl = `${base}/examples/${example.id}/`;
+const selectedLabs = example.labs.filter(row =>
+  ['VWF:Ag', 'VWF:CB', 'Platelet count'].includes(row.test),
+);
+---
+<section class="home-feature" id="featured-example" aria-labelledby="featured-title">
+  <p class="eyebrow">Featured pattern · {example.patient.label}</p>
+  <h2 id="featured-title">{example.pattern.label}</h2>
+  {example.sourceIssues.length > 0 && <aside class="source-issues" aria-label="Source data requiring review"><strong>Source data requiring review</strong>{example.sourceIssues.map(issue => <p>{issue}</p>)}</aside>}
+  <div class="home-feature-grid">
+    <figure class="home-source-card">
+      <PatientLanes example={example} scale={0.8} />
+      <figcaption>Separately displayed source lanes at the same vertical scale.</figcaption>
+    </figure>
+    <div class="home-feature-intro">
+      <p>{example.summary}</p>
+      <a class="source-button" href={patientUrl}>Open patient record <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+  <div class="home-evidence">
+    <section aria-labelledby="home-context-title">
+      <p class="eyebrow">Case context</p>
+      <h3 id="home-context-title">{example.patient.label} · {example.patient.age} · {example.patient.sex}</h3>
+      <p>{example.patient.diagnosis}. Variant: <strong>{example.patient.variant}</strong>.</p>
+      <p>{example.patient.history}</p>
+      <details>
+        <summary>Assay &amp; source context</summary>
+        <p>{example.assay.method}</p>
+        <p>{example.assay.control}</p>
+        <p>{example.assay.limitations}</p>
+      </details>
+    </section>
+    <section aria-labelledby="home-labs-title">
+      <p class="eyebrow" id="home-labs-title">Laboratory findings</p>
+      <div class="table-wrap">
+        <table>
+          <caption>{example.patient.label} · selected source results</caption>
+          <thead><tr><th scope="col">Test</th><th scope="col">Result</th><th scope="col">Source reference</th></tr></thead>
+          <tbody>
+            {selectedLabs.map(row => (
+              <tr><th scope="row">{row.test}</th><td>{row.result} {row.units}</td><td>{row.reference}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="small-note">{example.source.table}. Source-specific intervals. <a href={patientUrl}>All results and patient history →</a></p>
+    </section>
+  </div>
+  <div class="home-provenance">
+    <p>{example.rights.attribution} <a href={example.rights.url}>{example.rights.label}</a>. {example.rights.modifications}</p>
+    <details class="complete-figure">
+      <summary>Complete source Figure 1</summary>
+      <div class="gel-canvas"><img src={`${base}/media/${example.imageName}`} alt={example.image.alt} width={example.image.width} height={example.image.height} /></div>
+    </details>
+    <p><a href={example.source.url}>Read the original publication ↗</a></p>
+  </div>
+</section>
