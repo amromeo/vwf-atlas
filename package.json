@@ -1,0 +1,32 @@
+{
+  "name": "vwf-atlas",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "scripts": {
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 ATLAS_REVIEW=1 astro dev --host 127.0.0.1 --ignore-lock",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "build:review": "ASTRO_TELEMETRY_DISABLED=1 ATLAS_REVIEW=1 astro build",
+    "preview:review": "ASTRO_TELEMETRY_DISABLED=1 ATLAS_REVIEW=1 astro preview --host 127.0.0.1",
+    "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "test": "tsx --test tests/*.test.ts",
+    "test:browser": "playwright test",
+    "export:review": "npm run build:review && tsx scripts/export-review.ts"
+  },
+  "dependencies": {
+    "astro": "7.4.1",
+    "gray-matter": "4.0.3",
+    "marked": "18.1.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.11",
+    "@playwright/test": "1.64.1",
+    "@types/node": "26.6.5",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3"
+  }
+}

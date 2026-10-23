@@ -1,0 +1,7 @@
+node_modules/
+.astro/
+dist/
+dist-review/
+test-results/
+playwright-report/
+artifacts/
