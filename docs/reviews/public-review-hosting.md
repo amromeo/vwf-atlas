@@ -23,3 +23,7 @@ Regenerate using `npm run export:review`. Keep publication confined to the expli
 ## Homepage style exploration update
 
 The three owner-requested design concepts were published as review commit `882c84635efb097f6221ebf4d6361dac4141e58e`, retaining the previous review deployment as its parent. Source: `codex/style-exploration`; review evidence: `docs/reviews/style-exploration.md`. The homepage switcher uses `?variant=A` (Clinical reference), `?variant=B` (Visual gallery), and `?variant=C` (Editorial atlas). The owner has not selected a final design. Scientific approvals remain null.
+
+## Selected clinical homepage
+
+The owner selected **A — Clinical reference**. Review commit `bcf21e5da143d0320c7a3a0223a68cfddde7f306` publishes the selected homepage and shared patient-lane rendering. It retains the prior review deployment as parent. The comparison switcher and losing concepts are removed from this implementation and preserved on `codex/style-exploration` at `9559d78`. See `docs/reviews/clinical-homepage.md` for tests and independent reviews. All scientific approvals remain null; the source PR remains unmerged.
